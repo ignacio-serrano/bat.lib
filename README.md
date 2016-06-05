@@ -8,4 +8,4 @@ subrutinas.
 * Desarrollar `safeCD`.
 * Incorporar `loadProperties`.
 * Incorporar `safeMKDIR`.
-* Escribir tests automáticos para `findOutInstall`.
+* [HECHO] Escribir tests automáticos para `findOutInstall`.
