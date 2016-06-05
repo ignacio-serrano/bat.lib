@@ -1,4 +1,4 @@
-::<?xml version="1.0" encoding="cp850"?><contenido><![CDATA[
+::<?xml version="1.0" encoding="Cp850"?><contenido><![CDATA[
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: PROGRAMA ®test-all¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -16,6 +16,7 @@ SET testDir=%installDir%\..\src\test
 CALL :safeMKDIR "%testWorkDir%"
 CALL "%testDir%"\test-removeFileName.bat
 CALL "%testDir%"\test-findOutInstall.bat
+CALL "%testDir%"\test-safeMKDIR.bat
 
 ENDLOCAL
 EXIT /B 0

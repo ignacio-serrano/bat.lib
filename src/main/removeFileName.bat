@@ -1,11 +1,11 @@
-::<?xml version="1.0" encoding="cp850"?>
+::<?xml version="1.0" encoding="Cp850"?><contenido><![CDATA[
 :: TODO: Probar
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: SUBRUTINA ®removeFileName¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::    Elimina el nombre de fichero de una ruta.
 :: USO: 
-::    CALL %lib%\removeFileName ®["]path["]¯ ®retVar¯
+::    CALL %bat.lib%\removeFileName ®["]path["]¯ ®retVar¯
 :: Donde...
 ::    ®["]path["]¯: Ruta de la que se desea eliminar el nombre de fichero. Si la
 ::                  ruta contiene espacios debe ponerse entre comillas, si no, 

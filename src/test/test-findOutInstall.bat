@@ -13,9 +13,9 @@ IF NOT DEFINED testWorkDir (
 
 SET logFile="%testWorkDir%\test-findOutInstall.log"
 
-:: findOutInstall depende de removeFileName por lo que la variable %lib% debe
+:: findOutInstall depende de removeFileName por lo que la variable %bat.lib% debe
 :: est r inicializada.
-SET lib="%mainDir%"
+SET bat.lib="%mainDir%"
 
 :: TEST Absolute path
 SETLOCAL

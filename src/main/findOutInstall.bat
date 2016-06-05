@@ -1,4 +1,4 @@
-::<?xml version="1.0" encoding="cp850"?>
+::<?xml version="1.0" encoding="Cp850"?><contenido><![CDATA[
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: SUBRUTINA ®findOutInstall¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -21,7 +21,7 @@ IF "%installDir%" EQU "" (
 	SET installDir=%~f1
 )
 
-CALL %lib%\removeFileName "%installDir%" _removeFileName
+CALL %bat.lib%\removeFileName "%installDir%" _removeFileName
 SET installDir=%_removeFileName%
 
 ENDLOCAL & SET %retVar%=%installDir%
