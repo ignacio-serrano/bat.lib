@@ -17,6 +17,7 @@ CALL :safeMKDIR "%testWorkDir%"
 CALL "%testDir%"\test-removeFileName.bat
 CALL "%testDir%"\test-findOutInstall.bat
 CALL "%testDir%"\test-safeMKDIR.bat
+CALL "%testDir%"\test-loadProperties.bat
 
 ENDLOCAL
 EXIT /B 0

@@ -14,6 +14,7 @@ IF NOT DEFINED testWorkDir (
 SET logFile="%testWorkDir%\test-removeFileName.log"
 
 :: TEST 1
+SETLOCAL
 SET testId=1
 >%logFile% 2>&1 CALL "%mainDir%"\removeFileName.bat "D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main\removeFileName.bat" result
 
@@ -26,8 +27,10 @@ IF "%result%" EQU "D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\ma
 	ECHO El resultado fu‚ ®%result%¯
 	>>%logFile% ECHO El resultado fu‚ ®%result%¯
 )
+ENDLOCAL
 
 :: TEST 2
+SETLOCAL
 SET testId=2
 >>%logFile% 2>>&1 CALL "%mainDir%"\removeFileName.bat "C:\Windows\System32\cmd.exe" result
 
@@ -40,6 +43,7 @@ IF "%result%" EQU "C:\Windows\System32" (
 	ECHO El resultado fu‚ ®%result%¯
 	>>%logFile% ECHO El resultado fu‚ ®%result%¯
 )
+ENDLOCAL
 
 ENDLOCAL
 EXIT /B 0
