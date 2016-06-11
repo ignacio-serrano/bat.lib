@@ -3,23 +3,25 @@
 :: PROGRAMA ®test-all¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::    Prueba autom ticamente todos los componentes de bat.lib.
+::
+:: USO:
+::    test-all.bat
+::
+:: DEPENDENCIAS: :findOutInstall loadProperties safeMKDIR
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @ECHO OFF
 SETLOCAL
 CALL :findOutInstall "%~0" installDir
 
-SET lib=%installDir%\bat.lib
-SET testWorkDir=%installDir%\..\work\test
-SET mainDir=%installDir%\..\src\main
-SET testDir=%installDir%\..\src\test
+SET lib="%installDir%\bat.lib"
+CALL %lib%\loadProperties "%installDir%\cmd.properties"
+CALL %lib%\loadProperties "%testDir%\test.properties"
 
-CALL :safeMKDIR "%testWorkDir%"
-CALL "%testDir%"\test-removeFileName.bat
-CALL "%testDir%"\test-findOutInstall.bat
-CALL "%testDir%"\test-safeMKDIR.bat
-CALL "%testDir%"\test-loadProperties.bat
-CALL "%testDir%"\test-stringReplace.bat
-CALL "%testDir%"\test-stringReplaceByRef.bat
+CALL %lib%\safeMKDIR "%testWorkDir%"
+
+FOR %%i IN ("%testDir%\*.bat") DO (
+	CALL %%i
+)
 
 ENDLOCAL
 EXIT /B 0
@@ -36,7 +38,7 @@ EXIT /B 0
 ::    ®retVar¯: Nombre de una variable existente o no a trav‚s de la que se 
 ::              devolver  el directorio.
 ::
-:: DEPENDENCIAS: removeFileName
+:: DEPENDENCIAS: :removeFileName
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :findoutInstall
 SETLOCAL
@@ -86,27 +88,4 @@ EXIT /B 0
 :: FIN: SUBRUTINA ®removeFileName¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: INICIO: SUBRUTINA ®safeMKDIR¯
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::    Crea un directorio borr ndolo previemente si ya exist¡a.
-:: USO: 
-::    CALL :safeMKDIR "®Directorio a crear¯"
-:: Donde...
-::    ®Directorio a crear¯: Ruta absoluta o relativa del directorio a crear. El 
-::                          entrecomillado es opcional si la ruta no contiene 
-::                          espacios y obligatorio en caso contrario.
-::
-:: DEPENDENCIAS: NINGUNA
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:safeMKDIR
-IF EXIST %1 (
-	RD /S /Q %1
-)
-MD %1
-
-EXIT /B 0
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: FIN: SUBRUTINA ®safeMKDIR¯
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::]]></contenido>

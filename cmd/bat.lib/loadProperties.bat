@@ -12,7 +12,6 @@
 ::    ®prefijo¯:                        Prefijo con el que se crear n las 
 ::                                      variables de entorno. De no especificarse
 ::                                      se crear n sin prefijo
-::
 :: DEPENDENCIAS: NINGUNA
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 FOR /F "usebackq eol=# tokens=1 delims=ª" %%i IN ("%~1") DO (

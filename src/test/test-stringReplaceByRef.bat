@@ -8,7 +8,6 @@
 ::    SET testWorkDir=C:\myTestsWorkDir
 ::    CALL test-stringReplaceByRef.bat
 ::
-:: DEPENDENCIAS: NINGUNA
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 SETLOCAL
 IF NOT DEFINED testWorkDir (
@@ -21,6 +20,12 @@ IF NOT DEFINED mainDir (
 	ENDLOCAL
 	EXIT /B 1
 )
+IF NOT DEFINED lib (
+	ECHO ERROR: Entorno de tests no inicializado correctamente.
+	ENDLOCAL
+	EXIT /B 1
+)
+
 
 
 SET logFile="%testWorkDir%\test-stringReplaceByRef.log"
@@ -57,8 +62,8 @@ SET replacementString=Pedro
 SET expectedReturn="Hola Pedro."
 >>%logFile% 2>&1 CALL "%mainDir%"\stringReplaceByRef.bat sourceString searchString replacementString return
 
-ECHO %return%
-IF %return% EQU %expectedReturn% (
+:: Al poder haber comillas en las variables la comparaci¢n se hace tras sustituirlas por ù
+IF "%return:"=ù%" EQU "%expectedReturn:"=ù%" (
 	ECHO %~n0/TEST %testId%: SUCCESS
 	>>%logFile% ECHO %~n0/TEST %testId%: SUCCESS
 ) ELSE (
