@@ -33,10 +33,10 @@
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 SETLOCAL
 SET sourceStr=%~1
-SET findStr=%~2
-SET replaceStr=%~3
+SET searchStr=%~2
+SET replacementStr=%~3
 SET returnVar=%4
-CALL SET return=%%sourceStr:%findStr%=%replaceStr%%%
+CALL SET return=%%sourceStr:%searchStr%=%replacementStr%%%
 
 ENDLOCAL & SET %returnVar%=%return%
 EXIT /B 0

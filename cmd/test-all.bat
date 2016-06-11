@@ -19,6 +19,7 @@ CALL "%testDir%"\test-findOutInstall.bat
 CALL "%testDir%"\test-safeMKDIR.bat
 CALL "%testDir%"\test-loadProperties.bat
 CALL "%testDir%"\test-stringReplace.bat
+CALL "%testDir%"\test-stringReplaceByRef.bat
 
 ENDLOCAL
 EXIT /B 0
