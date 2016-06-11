@@ -1,11 +1,58 @@
 ::<?xml version="1.0" encoding="Cp850"?><contenido><![CDATA[
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: PROGRAMA ®test-all¯
+:: PROGRAMA ®bpp¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::    Prueba autom ticamente todos los componentes de bat.lib.
+::    Batch Preprocessor
+::    Procesa un fichero .bat procesando directivas como #include o #define
+::
+:: USO:
+::    bpp.bat ®["]fichero entrada["]¯ ®[["]fichero salida["]]¯
+:: Donde...
+::    ®["]fichero entrada["]¯:  Ruta absoluta o relativa del fichero de salida. 
+::                              El entrecomillado es opcional si la ruta no 
+::                              contiene espacios y obligatorio en caso 
+::                              contrario. 
+::    ®[["]fichero salida["]]¯: Ruta absoluta o relativa del fichero de salida. 
+::                              El entrecomillado es opcional si la ruta no 
+::                              contiene espacios y obligatorio en caso 
+::                              contrario. Este par metro es OPCIONAL.
+::
+:: DEPENDENCIAS: NINGUNA
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @ECHO OFF
 SETLOCAL
+:::::::::::::::::::::::::::::::::: PREPROCESO ::::::::::::::::::::::::::::::::::
+:: Esta variable se utilizar  para gestionar el ERRORLEVEL definitivo del 
+:: programa.
+SET errLvl=0
+
+CALL :parseParameters %*
+IF ERRORLEVEL 1 (
+	SET errLvl=1
+	GOTO :exit
+)
+
+ECHO [DEBUG]: inputFile=%inputFile%
+ECHO [DEBUG]: outputFile=%outputFile%
+IF EXIST "%outputFile%" (
+	DEL "%outputFile%"
+)
+:::::::::::::::::::::::::::::::::::: PROCESO :::::::::::::::::::::::::::::::::::
+FOR /F "delims=ª eol=ª tokens=1 usebackq" %%i IN ("%inputFile%") DO (
+REM	CALL :strReplace "%%i" ${projectName} %projectName%
+REM	SET safeWrite_input=!_strReplace!
+REM	CALL :safeWrite "%tmpDir%\%projectName%.source.path.properties"
+	ECHO [DEBUG]: %%i
+	>>"%outputFile%" ECHO %%i
+	
+	CALL :processLine %%i
+)
+
+
+
+
+GOTO :exit
+REM
 CALL :findOutInstall "%~0" installDir
 
 SET lib=%installDir%\bat.lib
@@ -18,11 +65,44 @@ CALL "%testDir%"\test-removeFileName.bat
 CALL "%testDir%"\test-findOutInstall.bat
 CALL "%testDir%"\test-safeMKDIR.bat
 CALL "%testDir%"\test-loadProperties.bat
-CALL "%testDir%"\test-stringReplace.bat
 
-ENDLOCAL
+:::::::::::::::::::::::::::::::::: POSTPROCESO :::::::::::::::::::::::::::::::::
+:exit
+EXIT /B %errLvl% & ENDLOCAL
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: INICIO: SUBRUTINA ®parseParameters¯
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::    Convierte los par metros pasados al programa en variables que el programa
+:: pueda utilizar.
+:: 
+:: USO: 
+::    CALL :parseParameters %*
+::
+:: DEPENDENCIAS: removeFileName (bueno, en realidad ninguna pero las habr )
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:parseParameters
+:: Como los par metros pueden contener comillas u otros separadores de cadenas, 
+:: no se pueden comparar con la cadena vac¡a. En su lugar, se informa con ellos
+:: una variable y si est  queda definida es que se ha pasado algo como par metro.
+SET aux=%*
+IF NOT DEFINED aux (
+	ECHO Debe pasarse un fichero como par metro.
+	EXIT /B 1
+) ELSE (
+	ECHO Parseando par metros recibidos: ®%*¯
+)
+SET inputFile=%~1
+SET outputFile=%inputFile%.bat
+:: NOTA: Habr  m s par metros en el futuro. Ver :parseNextParameter en dapro.bat
+:: para m s detalles sobre c¢mo implementarlos.
+
 EXIT /B 0
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: FIN: SUBRUTINA ®parseParameters¯
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+REM Dead code
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: INICIO: SUBRUTINA ®findOutInstall¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
