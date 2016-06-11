@@ -1,8 +1,8 @@
 ::<?xml version="1.0" encoding="cp850"?><contenido><![CDATA[
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: PROGRAMA ®test-stringReplaceByRefByRef¯
+:: PROGRAMA ®test-stringReplaceByRef¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::    Prueba autom ticamente la subrutina ®stringReplaceByRefByRef¯¯.
+::    Prueba autom ticamente la subrutina ®stringReplaceByRef¯.
 ::
 :: USO:
 ::    SET testWorkDir=C:\myTestsWorkDir
@@ -47,7 +47,7 @@ IF "%return%" EQU "%expectedReturn%" (
 ) ELSE (
 	ECHO %~n0/TEST %testId%: FAILURE
 	>>%logFile% ECHO %~n0/TEST %testId%: FAILURE
-	ECHO El resultado fu‚ ®%result%¯
+	ECHO El resultado fu‚ ®%return%¯. Se esperaba ®%expectedReturn%¯.
 	>>%logFile% ECHO El resultado fu‚ ®%return%¯. Se esperaba ®%expectedReturn%¯.
 )
 ENDLOCAL

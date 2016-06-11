@@ -4,10 +4,8 @@
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::    Bla bla bla
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-@ECHO OFF
 SETLOCAL
-ECHO %0
-CALL :removeFileName "%0" _removeFileName
+CALL :removeFileName "%~0" _removeFileName
 ECHO %_removeFileName%
 
 ENDLOCAL

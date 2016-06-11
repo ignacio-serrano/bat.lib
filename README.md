@@ -5,6 +5,7 @@ Subrutinas útiles para el desarrollo de scritps .BAT.
 * Desarrollar un framework de logging.
 * Desarrollar un preprocesador mínimo para permitir la inclusión estática de
 subrutinas.
+  * Conseguir que incluya cualquier fichero y no solo `removeFileName.bat`.
 * [HECHO] Desarrollar `stringReplaceByRef`.
 * [HECHO: Como 'stringReplace'] Incorporar `strReplace`.
 * [HECHO] Incorporar `loadProperties`.

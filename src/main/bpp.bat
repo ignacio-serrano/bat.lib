@@ -20,7 +20,7 @@
 :: DEPENDENCIAS: NINGUNA
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @ECHO OFF
-SETLOCAL
+SETLOCAL EnableDelayedExpansion
 :::::::::::::::::::::::::::::::::: PREPROCESO ::::::::::::::::::::::::::::::::::
 :: Esta variable se utilizar  para gestionar el ERRORLEVEL definitivo del 
 :: programa.
@@ -32,6 +32,9 @@ IF ERRORLEVEL 1 (
 	GOTO :exit
 )
 
+::TODO: Estoy que sacarlo de alg£n fichero de propiedades.
+SET bat.lib=D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main
+
 ECHO [DEBUG]: inputFile=%inputFile%
 ECHO [DEBUG]: outputFile=%outputFile%
 IF EXIST "%outputFile%" (
@@ -42,10 +45,9 @@ FOR /F "delims=ª eol=ª tokens=1 usebackq" %%i IN ("%inputFile%") DO (
 REM	CALL :strReplace "%%i" ${projectName} %projectName%
 REM	SET safeWrite_input=!_strReplace!
 REM	CALL :safeWrite "%tmpDir%\%projectName%.source.path.properties"
-	ECHO [DEBUG]: %%i
-	>>"%outputFile%" ECHO %%i
-	
-	CALL :processLine %%i
+	SET lineIn=%%i
+REM	ECHO [DEBUG]: !lineIn!
+	CALL :processLine lineIn
 )
 
 
@@ -100,6 +102,40 @@ SET outputFile=%inputFile%.bat
 EXIT /B 0
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: FIN: SUBRUTINA ®parseParameters¯
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: INICIO: SUBRUTINA ®processLine¯
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::    Procesa una de las l¡neas del fichero procesado.
+:: 
+:: USO: 
+::    CALL :parseParameters %*
+::
+:: DEPENDENCIAS: removeFileName (bueno, en realidad ninguna pero las habr )
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:processLine
+:: EnableDelayedExpansion hace que las expansiones de variables se realicen al 
+:: ejecutar los comandos y no al parsearlo. Esto evita un mont¢n de problemas al 
+:: manipular el contenido de ficheros que contienen car cteres especiales en 
+:: .BAT como <, > o ^. Pr cticamente elimina la necesidad de escaparlos.
+SETLOCAL EnableDelayedExpansion
+SET lineVar=%1
+SET returnVar=%2
+SET line=!%lineVar%!
+
+SET aux=!line:#include=!
+IF "%line%" NEQ "%aux%" (
+	ECHO Found !line!
+	>>"%outputFile%" ECHO ::!line!
+	>>"%outputFile%" TYPE "%bat.lib%\removeFileName.bat"
+) ELSE (
+	>>"%outputFile%" ECHO !line!
+)
+ENDLOCAL
+EXIT /B 0
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: FIN: SUBRUTINA ®processLine¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 REM Dead code

@@ -5,7 +5,7 @@
 ::    Busca texto dentro de una cadena y lo reemplaza por otro.
 ::
 :: USO:
-::    CALL :stringReplaceByRef ®sourceString¯ ®searchString¯ ®replacementString¯ ®returnVar¯
+::    CALL %bat.lib%\stringReplace ®sourceString¯ ®searchString¯ ®replacementString¯ ®returnVar¯
 :: Donde...
 ::    ®sourceString¯:      Nombre de la variable que contenga la cadena de texto 
 ::                         sobre la que se realizar  la b£squeda y remplazo de 
