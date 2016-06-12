@@ -123,11 +123,12 @@ IF "%line%" NEQ "%aux%" (
 	ECHO Found !line!
 	
 	FOR /F "usebackq eol=ª tokens=2 delims=<>" %%i IN ('!line!') DO (
-		ECHO %%i
+		SET includeFile=%%i
 	)
-	
+	ECHO !includeFile!
+
 	>>"%outputFile%" ECHO ::!line!
-	>>"%outputFile%" TYPE "%bat.lib%\removeFileName.bat"
+	>>"%outputFile%" TYPE "%bat.lib%\!includeFile!"
 ) ELSE (
 	>>"%outputFile%" ECHO !line!
 )
