@@ -30,7 +30,7 @@ SET logFile="%testWorkDir%\test-${subroutine}.log"
 :: TEST 1
 SETLOCAL
 SET testId=1
->>%logFile% 2>&1 CALL "%mainDir%"\removeFileName.bat "D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main\removeFileName.bat" return
+>>%logFile% 2>&1 CALL "%mainDir%\removeFileName.bat" "D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main\removeFileName.bat" return
 
 IF "%return%" EQU "D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main" (
 	ECHO %~n0/TEST %testId%: SUCCESS
@@ -48,7 +48,7 @@ ENDLOCAL
 :: TEST Absolute path
 SETLOCAL
 SET testId=Absolute path
->>%logFile% 2>&1 CALL "%mainDir%"\findOutInstall.bat "D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main\findOutInstall.bat" return
+>>%logFile% 2>&1 CALL "%mainDir%\findOutInstall.bat" "D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main\findOutInstall.bat" return
 
 IF "%return%" EQU "D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main" (
 	ECHO %~n0/TEST %testId%: SUCCESS

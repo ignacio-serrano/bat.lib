@@ -17,7 +17,7 @@
 ::                              contiene espacios y obligatorio en caso 
 ::                              contrario. Este par metro es OPCIONAL.
 ::
-:: DEPENDENCIAS: NINGUNA
+:: DEPENDENCIAS: :findOutInstall :loadProperties
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
@@ -32,41 +32,25 @@ IF ERRORLEVEL 1 (
 	GOTO :exit
 )
 
-::TODO: Estoy que sacarlo de alg£n fichero de propiedades.
-SET bat.lib=D:\Users\I¤aki\Documents\Mi c¢digo\@github.com\bat.lib\src\main
-
 ECHO [DEBUG]: inputFile=%inputFile%
 ECHO [DEBUG]: outputFile=%outputFile%
+
+CALL :findOutInstall "%~0" installDir
+ECHO [DEBUG]: installDir=%installDir%
+CALL :loadProperties "%installDir%\bpp.properties" properties
+ECHO [DEBUG]: properties.bat.lib=%properties.bat.lib%
+SET bat.lib=%properties.bat.lib%
+
 IF EXIST "%outputFile%" (
 	DEL "%outputFile%"
 )
 :::::::::::::::::::::::::::::::::::: PROCESO :::::::::::::::::::::::::::::::::::
 FOR /F "delims=ª eol=ª tokens=1 usebackq" %%i IN ("%inputFile%") DO (
-REM	CALL :strReplace "%%i" ${projectName} %projectName%
-REM	SET safeWrite_input=!_strReplace!
-REM	CALL :safeWrite "%tmpDir%\%projectName%.source.path.properties"
 	SET lineIn=%%i
-REM	ECHO [DEBUG]: !lineIn!
 	CALL :processLine lineIn
 )
 
-
-
-
 GOTO :exit
-REM
-CALL :findOutInstall "%~0" installDir
-
-SET lib=%installDir%\bat.lib
-SET testWorkDir=%installDir%\..\work\test
-SET mainDir=%installDir%\..\src\main
-SET testDir=%installDir%\..\src\test
-
-CALL :safeMKDIR "%testWorkDir%"
-CALL "%testDir%"\test-removeFileName.bat
-CALL "%testDir%"\test-findOutInstall.bat
-CALL "%testDir%"\test-safeMKDIR.bat
-CALL "%testDir%"\test-loadProperties.bat
 
 :::::::::::::::::::::::::::::::::: POSTPROCESO :::::::::::::::::::::::::::::::::
 :exit
@@ -92,10 +76,19 @@ IF NOT DEFINED aux (
 	ECHO Debe pasarse un fichero como par metro.
 	EXIT /B 1
 ) ELSE (
-	ECHO Parseando par metros recibidos: ®%*¯
+	ECHO [DEBUG]: Parseando par metros recibidos: ®%*¯
 )
 SET inputFile=%~1
-SET outputFile=%inputFile%.bat
+SET outputFile=%~2
+IF NOT DEFINED outputFile (
+	SET outputFile=%inputFile%.bat
+)
+
+:: Valida que el fichero de entrada exista.
+IF NOT EXIST "%inputFile%" (
+	ECHO El fichero especificado ®%inputFile%¯ no existe.
+	EXIT /B 2
+)
 :: NOTA: Habr  m s par metros en el futuro. Ver :parseNextParameter en dapro.bat
 :: para m s detalles sobre c¢mo implementarlos.
 
@@ -120,6 +113,7 @@ EXIT /B 0
 :: manipular el contenido de ficheros que contienen car cteres especiales en 
 :: .BAT como <, > o ^. Pr cticamente elimina la necesidad de escaparlos.
 SETLOCAL EnableDelayedExpansion
+ECHO [DEBUG]:processLine: ¨?
 SET lineVar=%1
 SET returnVar=%2
 SET line=!%lineVar%!
@@ -127,6 +121,11 @@ SET line=!%lineVar%!
 SET aux=!line:#include=!
 IF "%line%" NEQ "%aux%" (
 	ECHO Found !line!
+	
+	FOR /F "usebackq eol=ª tokens=2 delims=<>" %%i IN ('!line!') DO (
+		ECHO %%i
+	)
+	
 	>>"%outputFile%" ECHO ::!line!
 	>>"%outputFile%" TYPE "%bat.lib%\removeFileName.bat"
 ) ELSE (
@@ -138,7 +137,6 @@ EXIT /B 0
 :: FIN: SUBRUTINA ®processLine¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-REM Dead code
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: INICIO: SUBRUTINA ®findOutInstall¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -154,6 +152,7 @@ REM Dead code
 :: DEPENDENCIAS: removeFileName
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :findoutInstall
+ECHO [DEBUG]:findoutInstall: %%*=®%*¯
 SETLOCAL
 SET retVar=%2
 
@@ -200,6 +199,38 @@ EXIT /B 0
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: FIN: SUBRUTINA ®removeFileName¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: INICIO: SUBRUTINA ®loadProperties¯
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::    Lee un fichero de propiedades y lo carga en variables de entorno.
+::
+:: USO:
+::	  CALL :loadProperties "®Ruta al fichero de propiedades¯" [®prefijo¯]
+:: Donde...
+::    ®Ruta al fichero de propiedades¯: Ruta absoluta o relativa del fichero de 
+::                                      propiedades a leer.
+::    ®prefijo¯:                        Prefijo con el que se crear n las 
+::                                      variables de entorno. De no especificarse
+::                                      se crear n sin prefijo
+::
+:: DEPENDENCIAS: NINGUNA
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:loadProperties
+FOR /F "usebackq eol=# tokens=1 delims=ª" %%i IN ("%~1") DO (
+	IF "%2" EQU "" (
+		SET %%i
+	) ELSE (
+		SET %2.%%i
+	)
+)
+
+EXIT /B 0
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: FIN: SUBRUTINA ®loadProperties¯
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+REM Dead code
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: INICIO: SUBRUTINA ®safeMKDIR¯
