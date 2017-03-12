@@ -1,6 +1,6 @@
 ::<?xml version="1.0" encoding="Cp850"?><contenido><![CDATA[
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: PROGRAMA ®${program}¯
+:: PROGRAM ®${program}¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::    ${description}
 ::
@@ -79,25 +79,34 @@ EXIT /B 0
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: INICIO: SUBRUTINA ®findOutInstall¯
+:: BEGINNING: SUBROUTINE ®findOutInstall¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::    Obtiene la ruta absoluta del .bat pasado como par metro. Esta subrutina 
-:: ayuda a identificar el directorio de instalaci¢n del script .bat que la 
-:: invoca.
+::    Computes the absolute path of the .bat passed as parameter. This 
+:: subroutine helps identify the installation directory of .bat script which 
+:: invokes it.
 :: 
-:: USO: 
+:: USAGE: 
 ::    CALL :findOutInstall "%~0" ®retVar¯
-:: Donde...
-::    ®retVar¯: Nombre de una variable existente o no a trav‚s de la que se 
-::              devolver  el directorio.
+:: WHERE...
+::    ®retVar¯: Name of a variable (existent or not) by means of which the 
+::              directory will be returned.
 ::
-:: DEPENDENCIAS: removeFileName
+:: DEPENDENCIES: :removeFileName
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :findoutInstall
 SETLOCAL
 SET retVar=%2
 
-SET installDir=%~$PATH:1
+SET extension=%~x1
+:: If the program is invoked without extension, it won't be found in the PATH. 
+:: Adds the extension and recursively invokes :findoutInstall.
+IF "%extension%" == "" (
+	CALL :findOutInstall "%~1.bat" installDir
+	GOTO :findOutInstall.end
+) ELSE (
+	SET installDir=%~$PATH:1
+)
+
 IF "%installDir%" EQU "" (
 	SET installDir=%~f1
 )
@@ -105,10 +114,11 @@ IF "%installDir%" EQU "" (
 CALL :removeFileName "%installDir%" _removeFileName
 SET installDir=%_removeFileName%
 
+:findOutInstall.end
 ENDLOCAL & SET %retVar%=%installDir%
 EXIT /B 0
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: FIN: SUBRUTINA ®findOutInstall¯
+:: END: SUBROUTINE ®findOutInstall¯
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
